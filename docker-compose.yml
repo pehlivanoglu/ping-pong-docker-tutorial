@@ -1,0 +1,43 @@
+services:
+  ws-server:
+    build:
+      context: ./ws-server
+      dockerfile: Dockerfile
+    container_name: ws-server
+    tty: true
+    ports:
+      - "3950:3950"
+    networks:
+      ahmetpehlivanoglu-hw3-network:
+        ipv4_address: 192.168.1.10
+
+  ticktock-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.ticktock
+    container_name: ticktock-client
+    tty: true
+    depends_on:
+      - ws-server
+    networks:
+      ahmetpehlivanoglu-hw3-network:
+        ipv4_address: 192.168.1.11
+
+  pingpong-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.pingpong
+    container_name: pingpong-client
+    tty: true
+    depends_on:
+      - ws-server
+    networks:
+      ahmetpehlivanoglu-hw3-network:
+        ipv4_address: 192.168.1.12
+
+networks:
+  ahmetpehlivanoglu-hw3-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
